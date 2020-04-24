@@ -1,0 +1,11 @@
+from pyspark.ml import Pipeline
+from pyspark.ml.feature import StringIndexer
+from pyspark.ml.feature import OneHotEncoderEstimator
+from pyspark.ml.feature import VectorAssembler
+from pyspark.ml.classification import DecisionTreeClassifier
+indexer = StringIndexer(inputCol = "type", outputCol = "typeIndexed")
+va = VectorAssembler(inputCols = ["typeIndexed", "amount", "oldbalanceOrg", "newbalanceOrig", "oldbalanceDest", "newbalanceDest", "orgDiff", "destDiff"], outputCol = "features")
+dt = DecisionTreeClassifier(labelCol = "label", featuresCol = "features", seed = 54321, maxDepth = 5
+pipeline = Pipeline(stages=[indexer, va, dt])
+dt_model = pipeline.fit(train)
+display(dt_model.stages[-1])
